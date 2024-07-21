@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +23,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
+
+/*  
+
+This was inserted in before {children} in <ClerkProvider> but don't think it's needs to be there. However can't figure out how to redirect to signin page if user is not logged in? 
+I think I'm using different version of clerk.com than in video tutorial
+
+<SignedOut>
+<SignInButton />
+</SignedOut>
+<SignedIn>
+  <UserButton />
+</SignedIn> 
+
+*/
